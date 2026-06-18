@@ -1,0 +1,148 @@
+{
+  "name": "AI Job Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "776e9669-1b73-41d6-b781-23f2fd792eb7",
+              "name": "=job_role",
+              "value": "Ai engineer",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        0
+      ],
+      "id": "ed2be917-e70d-40dd-b485-89bc015cfb02",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Job Assistant.\n\nJob Role:\n{{$json.job_role}}\n\nGive:\n1. Required skills\n2. Learning roadmap\n3. Interview questions\n4. Resume tips\n\nShort and beginner friendly.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        384,
+        0
+      ],
+      "id": "932ded3a-e992-425d-b4a3-69986b4cb4f9",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        384,
+        192
+      ],
+      "id": "390da08a-a225-4eb2-a617-d3c8d38310a3",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "dBXIR3AjC19wddlf",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "pythonNative",
+        "pythonCode": "return [\n    {\n        \"json\": {\n            \"job_role\": \"Data Analyst\",\n            \"ai_response\": _items[0][\"json\"][\"text\"]\n        }\n    }\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        0
+      ],
+      "id": "9aa35cef-051a-43c0-b3de-b81c2d84be41",
+      "name": "Code in Python"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ff67aad5-7645-4362-bf9c-161928dd7aab",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in Python",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "24940b74-3886-488e-ad35-a53df383b131",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5115ceccd5a1cadb691258f08a45be70224767c3eaf496e174bc68a8b077b39e"
+  },
+  "nodeGroups": [],
+  "id": "9KIF0y0XDenEGheM",
+  "tags": []
+}
