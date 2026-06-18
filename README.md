@@ -143,9 +143,7 @@ Provide a job role and generate results.
 
 ## 📸 Workflow Screenshot
 
-```md
-![Workflow](workflow.png)
-```
+![Workflow Screenshot](workflow.png)
 
 ---
 
